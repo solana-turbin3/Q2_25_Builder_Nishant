@@ -19,21 +19,35 @@ const connection = new Connection("https://api.devnet.solana.com");
 
 const transfer = async () => {
   try {
-    const transaction = new Transaction().add(
+    const balance = await connection.getBalance(from.publicKey);
+
+    const txFee = new Transaction().add(
       SystemProgram.transfer({
         fromPubkey: from.publicKey,
         toPubkey: to,
-        lamports: LAMPORTS_PER_SOL * 0.1,
+        lamports: balance,
       })
     );
 
     const { blockhash } = await connection.getLatestBlockhash();
-    transaction.recentBlockhash = blockhash;
-    transaction.feePayer = from.publicKey;
+    txFee.recentBlockhash = blockhash;
+    txFee.feePayer = from.publicKey;
 
-    const sign = await sendAndConfirmTransaction(connection, transaction, [
-      from,
-    ]);
+    const feeForTx =
+      (await connection.getFeeForMessage(txFee.compileMessage(), "confirmed"))
+        .value || 0;
+
+    txFee.instructions.pop();
+
+    txFee.add(
+      SystemProgram.transfer({
+        fromPubkey: from.publicKey,
+        toPubkey: to,
+        lamports: balance - feeForTx,
+      })
+    );
+
+    const sign = await sendAndConfirmTransaction(connection, txFee, [from]);
 
     console.log(
       `Success! Check out TX here : https://explorer.solana.com/tx/${sign}?cluster=devnet`
@@ -44,3 +58,10 @@ const transfer = async () => {
 };
 
 transfer();
+
+const balance = async () => {
+  const balance = await connection.getBalance(from.publicKey);
+  console.log(`Balance : ${balance / LAMPORTS_PER_SOL} SOL`);
+};
+
+// balance();
