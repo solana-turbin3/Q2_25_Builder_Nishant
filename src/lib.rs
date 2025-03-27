@@ -1,28 +1,99 @@
+// use crate::programs::Turbin3_prereq::{SubmitArgs, TurbinePrereqProgram, UpdateArgs};
+use crate::programs::Turbin3_prereq::{CompleteArgs, TurbinePrereqProgram, UpdateArgs};
 use bs58;
+
 use solana_client::rpc_client::RpcClient;
 use solana_program::{account_info, hash::hash, pubkey::Pubkey, system_instruction::transfer};
 use solana_sdk::{
     message::Message,
-    signature::{Keypair, Signer, read_keypair_file},
+    signature::{read_keypair_file, Keypair, Signer},
     transaction::Transaction,
 };
+use solana_sdk::{signer::keypair, system_program};
 use std::io::{self, BufRead};
 use std::str::FromStr;
+
 mod programs;
 
 const RPC_URL: &str = "https://api.devnet.solana.com";
+const GITHUB_USERNAME: &str = "NishantCoder108";
+
+fn submit() {
+    let keypair = read_keypair_file("wallet_turbine_key.json").expect("Couldn't find wallet file");
+
+    let client = RpcClient::new(RPC_URL);
+
+    // let (prereq, _bump) = Pubkey::find_program_address(
+    //     &[b"preQ225", keypair.pubkey().as_ref()],
+    //     &TurbinePrereqProgram::id(),
+    // );
+
+    let prereq = TurbinePrereqProgram::derive_program_address(&[
+        b"prereq",
+        keypair.pubkey().to_bytes().as_ref(),
+    ]);
+
+    let args = CompleteArgs {
+        github: GITHUB_USERNAME.as_bytes().to_vec(),
+    };
+
+    // let updateArgs = UpdateArgs {
+    //     github: b"NishantCoder108".to_vec(),
+    // };
+    // Get recent blockhash
+    let blockhash = client
+        .get_latest_blockhash()
+        .expect("Failed to get recent blockhash");
+
+    // let transaction = TurbinePrereqProgram::submit(
+    //     &[&keypair.pubkey(), &prereq, &system_program::id()],
+    //     &args,
+    //     Some(&keypair.pubkey()),
+    //     &[&keypair],
+    //     blockhash,
+    // );
+
+    // let transaction = TurbinePrereqProgram::update(
+    //     &[&keypair.pubkey(), &prereq, &system_program::id()],
+    //     &updateArgs,
+    //     Some(&keypair.pubkey()),
+    //     &[&keypair],
+    //     blockhash,
+    // );
+
+    // let transaction = TurbinePrereqProgram::clean(
+    //     &[&keypair.pubkey(), &prereq],
+    //     keypair.pubkey(),
+    //     Some(&keypair.pubkey()),
+    //     &[&keypair],
+    //     blockhash,
+    // );
+
+    let transaction = TurbinePrereqProgram::complete(
+        &[&keypair.pubkey(), &prereq, &system_program::id()],
+        &args,
+        Some(&keypair.pubkey()),
+        &[&keypair],
+        blockhash,
+    );
+    let signature = client
+        .send_and_confirm_transaction(&transaction)
+        .expect("Failed to send transaction");
+    println!(
+        "Success! Check out your TX here: https://explorer.solana.com/tx/{}/?cluster=devnet",
+        signature
+    )
+}
+
+/// Main entry function
+pub fn main() {
+    submit();
+}
 
 #[cfg(test)]
 mod tests {
-    use solana_sdk::signer::keypair;
 
     use super::*;
-
-    // #[test]
-    // fn it_works() {
-    //     let result = add(2, 2);
-    //     assert_eq!(result, 4);
-    // }
 
     #[test]
     fn keygen() {
