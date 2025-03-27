@@ -8,6 +8,7 @@ use solana_sdk::{
 };
 use std::io::{self, BufRead};
 use std::str::FromStr;
+mod programs;
 
 const RPC_URL: &str = "https://api.devnet.solana.com";
 
