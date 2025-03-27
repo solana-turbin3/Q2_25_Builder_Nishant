@@ -12,3 +12,20 @@ cargo test
 cargo test wallet_to_base58 -- --nocapture
 ```
 
+### For Idlgen 
+- Add `solana-idlgen` to `Cargo.toml` file
+- Add `address` inside metadata for transaction smoothly
+
+```bash
+idlgen!(
+    {
+        "address": "Trb3aEx85DW1cEEvoqEaBkMn1tfmNEEEPaKzLSu4YAv",
+        "metadata": {
+          "name": "turbine_prereq",
+          "version": "0.1.0",
+          "spec": "0.1.0",
+          "description": "Created with Anchor"
+          "address": "Trb3aEx85DW1cEEvoqEaBkMn1tfmNEEEPaKzLSu4YAv"
+    }
+);  
+```
