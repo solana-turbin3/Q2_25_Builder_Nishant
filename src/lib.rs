@@ -1,8 +1,11 @@
 use bs58;
 use solana_client::rpc_client::RpcClient;
 use solana_program::{account_info, hash::hash, pubkey::Pubkey, system_instruction::transfer};
-use solana_sdk::signature::{Keypair, Signer, read_keypair_file};
-use solana_sdk::transaction::Transaction;
+use solana_sdk::{
+    message::Message,
+    signature::{Keypair, Signer, read_keypair_file},
+    transaction::Transaction,
+};
 use std::io::{self, BufRead};
 use std::str::FromStr;
 
@@ -62,8 +65,6 @@ mod tests {
 
         let sig = keypair.sign_message(message_bytes);
 
-        // let sig_hashed = hash(sig.as_ref());
-
         // After that we can verify the singature, using the default implementation
         match sig.verify(&pubkey.to_bytes(), message_bytes) {
             true => println!("Signature verified"),
@@ -75,13 +76,31 @@ mod tests {
         // Create a Solana devnet connection
         let rpc_client = RpcClient::new(RPC_URL);
 
+        // Get balance of dev wallet
+        let balance = rpc_client
+            .get_balance(&keypair.pubkey())
+            .expect("Failed to get balance");
+
+        println!("Balance: {}", balance);
+
         // Get recent blockhash
         let recent_blockhash = rpc_client
             .get_latest_blockhash()
             .expect("Failed to get recent blockhash");
 
+        // Create a test transaction to calculate fees
+        let message = Message::new_with_blockhash(
+            &[transfer(&keypair.pubkey(), &to_pubkey, balance)],
+            Some(&keypair.pubkey()),
+            &recent_blockhash,
+        );
+
+        let fee = rpc_client
+            .get_fee_for_message(&message)
+            .expect("Failed to get fee calculator");
+
         let transaction = Transaction::new_signed_with_payer(
-            &[transfer(&keypair.pubkey(), &to_pubkey, 1_000_000)],
+            &[transfer(&keypair.pubkey(), &to_pubkey, balance - fee)],
             Some(&keypair.pubkey()),
             &vec![&keypair],
             recent_blockhash,
