@@ -1,10 +1,10 @@
-// pub fn add(left: u64, right: u64) -> u64 {
-//     left + right
-// }
-
+use solana_sdk::{
+    pubkey::Pubkey,
+    signature::{Keypair, Signer},
+};
 #[cfg(test)]
 mod tests {
-    // use super::*;
+    use super::*;
 
     // #[test]
     // fn it_works() {
@@ -12,10 +12,14 @@ mod tests {
     //     assert_eq!(result, 4);
     // }
 
-    use solana_sdk;
-
     #[test]
-    fn keygen() {}
+    fn keygen() {
+        let kp = Keypair::new();
+
+        println!("Generated Solana Wallet : {}", kp.pubkey().to_string());
+        println!("Save your wallet into json file");
+        println!("{:?}", kp.to_bytes());
+    }
 
     #[test]
     fn airdrop() {}
