@@ -1,4 +1,4 @@
-import "dotenv/config";
+import "dotenv/config.js";
 import {
   Keypair,
   PublicKey,
@@ -7,9 +7,9 @@ import {
 } from "@solana/web3.js";
 import bs58 from "bs58";
 import { Program, AnchorProvider, Wallet } from "@coral-xyz/anchor";
-import { IDL } from "./programs/turbin_preq.ts";
+import { IDL } from "./programs/turbin_preq.js";
 
-import type { Turbin3Prereq } from "./programs/turbin_preq.ts";
+import type { Turbin3Prereq } from "./programs/turbin_preq.js";
 
 const turbinKey = process.env.TURBIN_KEY!;
 const turbinKeypair = Keypair.fromSecretKey(bs58.decode(turbinKey));
