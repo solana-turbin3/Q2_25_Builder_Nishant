@@ -1,11 +1,5 @@
-<div style="text-align:center">
+<p align="center">
+  <img src="images/turbin3_logo.png" alt="Turbin3 Logo" width="150" />
+</p>
 
-## Nishant's Turbin3  Q2 2025 Codebase 💻
-
-</div>
-
-<div style="text-align:center">
-
-![Turbin3 Logo](images/turbin3_logo.png)
-</div>
-
+<h2 align="center">Nishant's Turbin3 Q2 2025 Codebase 💻</h2>
