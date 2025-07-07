@@ -8,8 +8,8 @@
 
 ### 📂 Learning Resource Directories
 
-- **Q3 2025 Builder:** `./Q3_25_Turbin3_Builders`
-- **Q2 2025 Builder:** `./Q2_25_Builder_Nishant`
+- **Q3 2025 Builder:** [`./Q3_25_Turbin3_Builders`](./Q3_25_Turbin3_Builders)
+- **Q2 2025 Builder:** [`./Q2_25_Builder_Nishant`](./Q2_25_Builder_Nishant)
 
 
 
