@@ -8,7 +8,7 @@
 
 ### 📂 Learning Resource Directories
 
-- **Q3 2025 Builder:** [`./Q3_25_Turbin3_Builders`](https://github.com/NishantCoder108/Q3_25_Turbin3_Builders/tree/3933b96e28040381b0ed3ca75d14e555b3ee2542)
+- **Q3 2025 Builder:** [`./Q3_25_Turbin3_Builders`](https://github.com/NishantCoder108/Q3_25_Turbin3_Builders)
 - **Q2 2025 Builder:** [`./Q2_25_Builder_Nishant`](https://github.com/NishantCoder108/Q2_25_Builder_Nishant/tree/1faca1527e50c062ae479403d187c967f946d3c6)
 
 
